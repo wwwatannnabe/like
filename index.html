@@ -3,154 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>分類テスト</title>
+    <title>rio lover</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            font-family: sans-serif;
-            margin: 40px;
-            text-align: center;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            overflow-x: hidden;
         }
-
-        /* メインの3つのボタン（赤、青、黄の大きな円） */
-        .main-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 40px;
+        /* Smooth scale and fade animations */
+        .fade-in {
+            animation: fadeIn 0.25s ease-out forwards;
         }
-
-        .circle-btn {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* 赤（米） */
-        .btn-rice { background-color: #ff4d4d; }
-        /* 青（パン） */
-        .btn-bread { background-color: #4da6ff; }
-        /* 黄（麺） */
-        .btn-noodle { background-color: #ffcc00; color: #333; }
-
-        /* サブ項目の表示エリア */
-        .sub-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 40px;
-            min-height: 80px;
-        }
-
-        .sub-group {
-            display: none; /* 初期状態は非表示 */
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sub-group.active {
-            display: flex; /* 選択されたら表示 */
-        }
-
-        .sub-circle-btn {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-        }
-
-        /* サブの色の微調整（似た系統の色） */
-        .sub-red { background-color: #ff8080; }
-        .sub-blue { background-color: #80c2ff; }
-        .sub-yellow { background-color: #ffe066; color: #333; }
-
-        /* 説明欄エリア */
-        #description-box {
-            border: 1px solid #ccc;
-            padding: 20px;
-            max-width: 400px;
-            margin: 0 auto;
-            text-align: left;
-            min-height: 50px;
-            background-color: #f9f9f9;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 select-none">
 
-    <h1>分類メニュー</h1>
+    <header class="text-center my-4">
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-800">りおちゃんの好きなところ</h1>
+        <p class="text-sm text-slate-500 mt-1">円をタップしてね。２個目の円もタップできるよ。</p>
+    </header>
 
-    <!-- メインボタン（米、パン、麺） -->
-    <div class="main-buttons">
-        <button class="circle-btn btn-rice" onclick="showSub('rice')">米</button>
-        <button class="circle-btn btn-bread" onclick="showSub('bread')">パン</button>
-        <button class="circle-btn btn-noodle" onclick="showSub('noodle')">麺</button>
+    <main class="flex-grow flex items-center justify-center relative my-6 sm:my-10">
+        <!-- Container allowing space for radiating sub-buttons in 360 degrees -->
+        <div id="explorer-container" class="w-full max-w-lg h-[480px] sm:h-[540px] relative flex items-center justify-center">
+            
+            <!-- 1. Rice Button (Top of triangle) -->
+            <div id="wrapper-rice" class="absolute top-12 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center">
+                <button onclick="toggleCategory('rice')" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-red-500 hover:bg-red-600 active:scale-95 text-white font-bold text-lg shadow-xl flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-red-300 z-40">
+                    外見
+                </button>
+                <!-- Radial Sub-buttons container -->
+                <div id="sub-container-rice" class="absolute inset-0 pointer-events-none hidden"></div>
+            </div>
+
+            <!-- 2. Noodles Button (Bottom-left of triangle) -->
+            <div id="wrapper-noodles" class="absolute bottom-12 left-8 sm:left-16 z-30 flex items-center justify-center">
+                <button onclick="toggleCategory('noodles')" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold text-lg shadow-xl flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-blue-300 z-40">
+                    中身
+                </button>
+                <!-- Radial Sub-buttons container -->
+                <div id="sub-container-noodles" class="absolute inset-0 pointer-events-none hidden"></div>
+            </div>
+
+            <!-- 3. Bread Button (Bottom-right of triangle) -->
+            <div id="wrapper-bread" class="absolute bottom-12 right-8 sm:right-16 z-30 flex items-center justify-center">
+                <button onclick="toggleCategory('bread')" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-amber-400 hover:bg-amber-500 active:scale-95 text-slate-900 font-bold text-lg shadow-xl flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-amber-200 z-40">
+                    行動
+                </button>
+                <!-- Radial Sub-buttons container -->
+                <div id="sub-container-bread" class="absolute inset-0 pointer-events-none hidden"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="modal-container" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div id="modal-content" class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative fade-in border border-slate-100">
+            <!-- Speech bubble pointer triangle decoration -->
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-white rotate-45 border-t border-l border-slate-100"></div>
+            
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full flex items-center justify-center bg-slate-100 transition-colors">
+                ×
+            </button>
+            <h3 id="modal-title" class="text-xl font-bold text-slate-800 mb-2"></h3>
+            <p id="modal-desc" class="text-slate-600 text-sm sm:text-base leading-relaxed"></p>
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium rounded-xl transition-colors">
+                    閉じる
+                </button>
+            </div>
+        </div>
     </div>
 
-    <!-- サブ項目エリア -->
-    <div class="sub-container">
-        <!-- 米のサブ項目 -->
-        <div id="sub-rice" class="sub-group">
-            <button class="sub-circle-btn sub-red" onclick="showDesc('どんぶり', 'どんぶりは、ご飯の上に具材をのせた料理です。')">どんぶり</button>
-            <button class="sub-circle-btn sub-red" onclick="showDesc('カレー', 'カレーは、スパイスで味付けしたソースをご飯にかけて食べます。')">カレー</button>
-            <button class="sub-circle-btn sub-red" onclick="showDesc('すし', 'すしは、酢飯に魚介類などを合わせた料理です。')">すし</button>
-        </div>
-
-        <!-- パンのサブ項目 -->
-        <div id="sub-bread" class="sub-group">
-            <button class="sub-circle-btn sub-blue" onclick="showDesc('サンドイッチ', 'サンドイッチは、パンで具材を挟んだ料理です。')">サンド</button>
-            <button class="sub-circle-btn sub-blue" onclick="showDesc('トースト', 'トーストは、パンを焼いたものです。')">トースト</button>
-            <button class="sub-circle-btn sub-blue" onclick="showDesc('ハンバーガー', 'ハンバーガーは、パンで肉などを挟んだファストフードです。')">バーガー</button>
-        </div>
-
-        <!-- 麺のサブ項目 -->
-        <div id="sub-noodle" class="sub-group">
-            <button class="sub-circle-btn sub-yellow" onclick="showDesc('ラーメン', 'ラーメンは、スープに入った中華麺です。')">ラーメン</button>
-            <button class="sub-circle-btn sub-yellow" onclick="showDesc('うどん', 'うどんは、小麦粉から作られる太い麺です。')">うどん</button>
-            <button class="sub-circle-btn sub-yellow" onclick="showDesc('パスタ', 'パスタは、イタリア発祥の麺料理です。')">パスタ</button>
-        </div>
-    </div>
-
-    <!-- 説明欄 -->
-    <div id="description-box">
-        <h3>説明</h3>
-        <p id="desc-text">上のボタンを押してください。</p>
-    </div>
+    <footer class="text-center text-xs text-slate-400 py-2">
+        Food Category Explorer &copy; 2026
+    </footer>
 
     <script>
-        // メインボタンを押した時の処理（サブ項目の切り替え）
-        function showSub(category) {
-            // 一度すべてのサブグループを非表示にする
-            document.querySelectorAll('.sub-group').forEach(el => {
-                el.classList.remove('active');
+        // Data containing sub-items and descriptions for each category (now 6 items each)
+        const categoryData = {
+            rice: [
+                { name: "目", desc: "一目ぼれした好きなところ。本当にきれいな目してる👀" },
+                { name: "鼻", desc: "上からも下からも横からもどこから見ても整った鼻。小さくて羨ましい🌸" },
+                { name: "口", desc: "普段は小さくてきれいな口。笑うときはとってもかわいい口👄" },
+                { name: "服装", desc: "ほんとにおしゃれ。隣にいてプレッシャーがすごい😿" },
+                { name: "背", desc: "ちょうどいい高さではぐしやす🐶" },
+                { name: "スタイル", desc: "さすがにスタイルよすぎてどきどきする💛" }
+            ],
+            noodles: [
+                { name: "いい子", desc: "一番好きなところ。本当にいい子！！って感じで一目ぼれの次に好きになった理由の一つ🐈" },
+                { name: "優しい子", desc: "車運転するときとかいつも気遣ってくれて本当にうれしい🚙" },
+                { name: "真面目な子", desc: "学年上位に入るくらいちゃんと授業に行って頑張りやさんだね。すごいしえらいね本" },
+                { name: "元気な子", desc: "いつも元気いっぱいで明るい。いっぱい全力で笑ってくれてかわいい☺" },
+                { name: "大人っぽい子", desc: "たまに本当に年下なのかなっていうくらいしっかりしてて悔しいよ🐒" },
+                { name: "サバサバな子", desc: "りおちゃんといえばこれ。結構びしっと言ってくれて一緒にいて安心するよ🐡" }
+            ],
+            bread: [
+                { name: "頑張り屋さん", desc: "学校もバイトも頑張ってる姿本当に好き。尊敬してるよ🍣" },
+                { name: "几帳面", desc: "かばんの中とか小分けしてて自分のずぼらさを改めて感じる👜" },
+                { name: "負けず嫌い", desc: "ボウリングのときうまくできなくてすねちゃってかわいすぎた📍" },
+                { name: "甘えん坊", desc: "実は甘えん坊。会いたいとかはぐしたいとかうれしかったよ🍰" },
+                { name: "食欲旺盛", desc: "おなかすいたーとかかわいすぎる。いっぱい食べる子でさらに好きになったところの一つ🍚" },
+                { name: "器用", desc: "ブレスレットありがと。めちゃ上手すぎてびっくりした😲" }
+            ]
+        };
+
+        let activeCategory = null;
+
+        // Toggle category and trigger 360-degree circular rendering
+        function toggleCategory(categoryKey) {
+            const keys = ['rice', 'noodles', 'bread'];
+            
+            keys.forEach(key => {
+                const subContainer = document.getElementById(`sub-container-${key}`);
+                if (key === categoryKey) {
+                    if (subContainer.classList.contains('hidden')) {
+                        subContainer.classList.remove('hidden');
+                        activeCategory = key; // Set activeCategory first
+                        renderRadialButtons(subContainer, categoryData[key].length);
+                    } else {
+                        subContainer.classList.add('hidden');
+                        subContainer.innerHTML = '';
+                        activeCategory = null;
+                    }
+                } else {
+                    subContainer.classList.add('hidden');
+                    subContainer.innerHTML = '';
+                }
             });
-
-            // 選択されたカテゴリのサブグループを表示する
-            document.getElementById('sub-' + category).classList.add('active');
-
-            // 説明欄をリセット
-            document.getElementById('desc-text').innerText = '項目を選んでください。';
         }
 
-        // サブ項目を押した時の処理（説明文の表示）
-        function showDesc(title, text) {
-            document.getElementById('desc-text').innerHTML = '<strong>' + title + '</strong><br>' + text;
+        // Compute 360-degree circular positions around the parent button using Math.sin / Math.cos
+        function renderRadialButtons(containerElement, totalItems) {
+            containerElement.innerHTML = '';
+            if (!activeCategory || !categoryData[activeCategory]) return;
+            const items = categoryData[activeCategory];
+            const radius = 100; // Radius distance from the parent button center in pixels
+            const btnSize = 64; // Sub-button width/height offset correction (half of 64px = 32px)
+
+            items.forEach((item, index) => {
+                // Calculate angle in radians to distribute evenly across 360 degrees (2 * PI)
+                const angle = (index / totalItems) * 2 * Math.PI;
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+
+                const btn = document.createElement('button');
+                // Smaller circular sub-button styled cleanly without emojis
+                btn.className = "absolute w-16 h-16 rounded-full bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold shadow-lg border-2 border-slate-200 flex items-center justify-center transition-all duration-200 active:scale-95 pointer-events-auto fade-in z-50 text-center p-1 leading-tight";
+                
+                // Position relative to the center of the parent button container
+                btn.style.left = `calc(50% + ${x}px - ${btnSize / 2}px)`;
+                btn.style.top = `calc(50% + ${y}px - ${btnSize / 2}px)`;
+                btn.textContent = item.name;
+
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    showDescription(item.name, item.desc);
+                };
+
+                containerElement.appendChild(btn);
+            });
         }
+
+        // Display description popup bubble
+        function showDescription(title, description) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-desc').textContent = description;
+            const modal = document.getElementById('modal-container');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Close description popup bubble
+        function closeModal() {
+            const modal = document.getElementById('modal-container');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        // Close active expanded sub-buttons when tapping outside on background
+        window.onclick = function(event) {
+            const container = document.getElementById('explorer-container');
+            if (!container.contains(event.target)) {
+                ['rice', 'noodles', 'bread'].forEach(key => {
+                    const subContainer = document.getElementById(`sub-container-${key}`);
+                    subContainer.classList.add('hidden');
+                    subContainer.innerHTML = '';
+                });
+                activeCategory = null;
+            }
+        };
     </script>
-
 </body>
 </html>
