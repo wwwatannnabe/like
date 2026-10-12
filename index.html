@@ -96,29 +96,30 @@
 
     <main class="flex-grow flex items-center justify-center relative my-4 sm:my-10 z-10">
         <!-- Dynamic background glowing aura behind the buttons -->
-        <div id="button-aura" class="absolute w-64 h-64 sm:w-96 sm:h-96 rounded-full bg-rose-500/10 blur-3xl pointer-events-none dynamic-aura z-20"></div>
+        <div id="button-aura" class="absolute w-56 h-56 sm:w-80 sm:h-80 rounded-full bg-rose-500/10 blur-3xl pointer-events-none dynamic-aura z-20"></div>
 
-        <div id="explorer-container" class="w-full max-w-sm sm:max-w-lg h-[380px] sm:h-[540px] relative flex items-center justify-center z-30">
+        <!-- Compact layout container keeping circles close to the center and preventing aspect ratio stretch -->
+        <div id="explorer-container" class="w-full max-w-[280px] sm:max-w-md aspect-square relative flex items-center justify-center z-30">
             
-            <!-- 1. Rice Button (Top of triangle) - Red / Appearance -->
-            <div id="wrapper-rice" class="absolute top-4 sm:top-12 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center">
-                <button onclick="toggleCategory('rice')" class="w-22 h-22 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 active:scale-95 text-white font-bold text-lg shadow-xl shadow-rose-500/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-rose-300 z-40 border-2 border-white/80">
+            <!-- 1. Rice Button (Top of triangle) - Moved closer to center -->
+            <div id="wrapper-rice" class="absolute top-8 sm:top-12 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center">
+                <button onclick="toggleCategory('rice')" class="w-22 h-22 sm:w-28 sm:h-28 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 active:scale-95 text-white font-bold text-base sm:text-lg shadow-xl shadow-rose-500/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-rose-300 z-40 border-2 border-white/80 shrink-0">
                     外見
                 </button>
                 <div id="sub-container-rice" class="absolute inset-0 pointer-events-none hidden"></div>
             </div>
 
-            <!-- 2. Noodles Button (Bottom-left of triangle) - Center-oriented on mobile -->
-            <div id="wrapper-noodles" class="absolute bottom-4 left-6 sm:left-16 z-30 flex items-center justify-center">
-                <button onclick="toggleCategory('noodles')" class="w-22 h-22 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-sky-400 to-blue-500 hover:from-sky-500 hover:to-blue-600 active:scale-95 text-white font-bold text-lg shadow-xl shadow-blue-500/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-blue-300 z-40 border-2 border-white/80">
+            <!-- 2. Noodles Button (Bottom-left of triangle) - Pulled closer to center -->
+            <div id="wrapper-noodles" class="absolute bottom-6 left-6 sm:left-12 z-30 flex items-center justify-center">
+                <button onclick="toggleCategory('noodles')" class="w-22 h-22 sm:w-28 sm:h-28 rounded-full bg-gradient-to-tr from-sky-400 to-blue-500 hover:from-sky-500 hover:to-blue-600 active:scale-95 text-white font-bold text-base sm:text-lg shadow-xl shadow-blue-500/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-blue-300 z-40 border-2 border-white/80 shrink-0">
                     中身
                 </button>
                 <div id="sub-container-noodles" class="absolute inset-0 pointer-events-none hidden"></div>
             </div>
 
-            <!-- 3. Bread Button (Bottom-right of triangle) - Center-oriented on mobile -->
-            <div id="wrapper-bread" class="absolute bottom-4 right-6 sm:right-16 z-30 flex items-center justify-center">
-                <button onclick="toggleCategory('bread')" class="w-22 h-22 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 active:scale-95 text-slate-900 font-bold text-lg shadow-xl shadow-orange-400/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-amber-200 z-40 border-2 border-white/80">
+            <!-- 3. Bread Button (Bottom-right of triangle) - Pulled closer to center -->
+            <div id="wrapper-bread" class="absolute bottom-6 right-6 sm:right-12 z-30 flex items-center justify-center">
+                <button onclick="toggleCategory('bread')" class="w-22 h-22 sm:w-28 sm:h-28 rounded-full bg-gradient-to-tr from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 active:scale-95 text-slate-900 font-bold text-base sm:text-lg shadow-xl shadow-orange-400/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-amber-200 z-40 border-2 border-white/80 shrink-0">
                     行動
                 </button>
                 <div id="sub-container-bread" class="absolute inset-0 pointer-events-none hidden"></div>
@@ -305,7 +306,7 @@
                 el.style.backgroundColor = theme.shapeBg;
             });
             const aura = document.getElementById('button-aura');
-            aura.className = `absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full blur-3xl pointer-events-none dynamic-aura z-20 ${theme.auraBg}`;
+            aura.className = `absolute w-64 h-64 sm:w-80 sm:h-80 rounded-full blur-3xl pointer-events-none dynamic-aura z-20 ${theme.auraBg}`;
             document.getElementById('main-title').className = `text-2xl sm:text-3xl font-extrabold tracking-tight drop-shadow-sm transition-colors duration-300 ${theme.titleColor}`;
             document.getElementById('main-subtitle').className = `text-sm mt-1 font-medium transition-colors duration-300 ${theme.subColor}`;
             document.getElementById('footer-text').className = `text-center text-xs py-2 z-10 font-medium transition-colors duration-300 ${theme.footerColor}`;
@@ -344,9 +345,8 @@
             if (!activeCategory || !categoryData[activeCategory]) return;
             const items = categoryData[activeCategory];
             
-            // スマホでも見切れないちょうど良い広がり半径とボタンサイズ
-            const radius = window.innerWidth < 640 ? 76 : 105;
-            const btnSize = window.innerWidth < 640 ? 52 : 64;
+            const radius = window.innerWidth < 640 ? 68 : 95;
+            const btnSize = window.innerWidth < 640 ? 48 : 64;
             const theme = themes[categoryKey];
 
             items.forEach((item, index) => {
@@ -355,7 +355,7 @@
                 const y = Math.sin(angle) * radius;
 
                 const btn = document.createElement('button');
-                btn.className = `absolute w-[52px] h-[52px] sm:w-16 sm:h-16 rounded-full bg-white ${theme.subHover} text-slate-700 text-xs sm:text-sm font-bold shadow-md border-2 ${theme.subBorder} flex items-center justify-center transition-all duration-200 active:scale-95 pointer-events-auto fade-in z-50 text-center p-0.5 leading-tight`;
+                btn.className = `absolute w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white ${theme.subHover} text-slate-700 text-[10px] sm:text-sm font-bold shadow-md border-2 ${theme.subBorder} flex items-center justify-center transition-all duration-200 active:scale-95 pointer-events-auto fade-in z-50 text-center p-0.5 leading-tight shrink-0`;
                 
                 btn.style.left = `calc(50% + ${x}px - ${btnSize / 2}px)`;
                 btn.style.top = `calc(50% + ${y}px - ${btnSize / 2}px)`;
@@ -428,14 +428,13 @@
             }
         };
 
-        const anniversaryDate = new Date(2026, 7, 3, 2, 0, 0); // August 3, 2026 02:00:00 (Month is 0-indexed: 7 = August)
+        const anniversaryDate = new Date(2026, 7, 3, 2, 0, 0); // August 3, 2026 02:00:00
 
         function updateCounter() {
             const now = new Date();
             const diff = now - anniversaryDate;
 
             if (diff < 0) {
-                // If current time is before August 3, 2026
                 document.getElementById('counter-time').textContent = "まもなくスタート！";
                 return;
             }
@@ -449,7 +448,6 @@
             document.getElementById('counter-time').textContent = `${days}日 ${hours}時間 ${minutes}分 ${secs}秒`;
         }
 
-        // Run immediately and update every second
         updateCounter();
         setInterval(updateCounter, 1000);
     </script>
