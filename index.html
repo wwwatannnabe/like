@@ -343,8 +343,10 @@
             containerElement.innerHTML = '';
             if (!activeCategory || !categoryData[activeCategory]) return;
             const items = categoryData[activeCategory];
-            const radius = 105;
-            const btnSize = 64;
+            
+            // スマホ画面（幅640px未満）のときは半径を少し小さく（82px）して、見切れないようにする
+            const radius = window.innerWidth < 640 ? 82 : 105;
+            const btnSize = window.innerWidth < 640 ? 56 : 64;
             const theme = themes[categoryKey];
 
             items.forEach((item, index) => {
@@ -353,7 +355,8 @@
                 const y = Math.sin(angle) * radius;
 
                 const btn = document.createElement('button');
-                btn.className = `absolute w-16 h-16 rounded-full bg-white ${theme.subHover} text-slate-700 text-xs sm:text-sm font-bold shadow-lg border-2 ${theme.subBorder} flex items-center justify-center transition-all duration-200 active:scale-95 pointer-events-auto fade-in z-50 text-center p-1 leading-tight`;
+                // スマホ時のみボタンサイズをほんの少しコンパクトに調整
+                btn.className = `absolute w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white ${theme.subHover} text-slate-700 text-[11px] sm:text-sm font-bold shadow-lg border-2 ${theme.subBorder} flex items-center justify-center transition-all duration-200 active:scale-95 pointer-events-auto fade-in z-50 text-center p-1 leading-tight`;
                 
                 btn.style.left = `calc(50% + ${x}px - ${btnSize / 2}px)`;
                 btn.style.top = `calc(50% + ${y}px - ${btnSize / 2}px)`;
