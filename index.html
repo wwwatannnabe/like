@@ -8,9 +8,42 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            background: linear-gradient(135deg, #fff1f2 0%, #fdf2f8 50%, #fef3c7 100%);
             color: #1e293b;
             overflow-x: hidden;
+            position: relative;
+            transition: background 0.5s ease-in-out;
+        }
+        /* Floating background shapes animation */
+        .floating-shape {
+            position: absolute;
+            background: rgba(244, 63, 94, 0.08);
+            border-radius: 50%;
+            animation: floatUp 8s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 0;
+            transition: background-color 0.5s ease;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.6) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-15vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+        /* Floating Emojis Animation for hearts, animals, and treats */
+        .floating-emoji {
+            position: absolute;
+            font-size: 1.75rem;
+            animation: floatEmoji 9s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 0;
+            user-select: none;
+        }
+        @keyframes floatEmoji {
+            0% { transform: translateY(105vh) translateX(0px) scale(0.8) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.85; }
+            50% { transform: translateY(50vh) translateX(25px) scale(1.1) rotate(15deg); }
+            80% { opacity: 0.85; }
+            100% { transform: translateY(-10vh) translateX(-20px) scale(0.9) rotate(-15deg); opacity: 0; }
         }
         /* Smooth scale and fade animations */
         .fade-in {
@@ -20,43 +53,74 @@
             from { opacity: 0; transform: scale(0.85); }
             to { opacity: 1; transform: scale(1); }
         }
+        /* Dynamic aura/glow background effect behind buttons */
+        .dynamic-aura {
+            transition: all 0.5s ease-in-out;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6 select-none">
+<body id="body-bg" class="min-h-screen flex flex-col justify-between p-4 sm:p-6 select-none relative">
 
-    <header class="text-center my-4">
-        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-800">りおちゃんの好きなところ</h1>
-        <p class="text-sm text-slate-500 mt-1">円をタップしてね。２個目の円もタップできるよ。</p>
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div id="shape-1" class="floating-shape w-12 h-12 left-[10%]" style="animation-duration: 7s;"></div>
+        <div id="shape-2" class="floating-shape w-16 h-16 left-[30%]" style="animation-duration: 9s;"></div>
+        <div id="shape-3" class="floating-shape w-10 h-10 left-[70%]" style="animation-duration: 6s;"></div>
+        <div id="shape-4" class="floating-shape w-20 h-20 left-[85%]" style="animation-duration: 11s;"></div>
+        
+        <div id="emoji-container" class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="floating-emoji" style="left: 6%; animation-duration: 8s; animation-delay: 0s;">💖</div>
+            <div class="floating-emoji" style="left: 18%; animation-duration: 10s; animation-delay: 2s;">💌</div>
+            <div class="floating-emoji" style="left: 28%; animation-duration: 7.5s; animation-delay: 1s;">💗</div>
+            <div class="floating-emoji" style="left: 42%; animation-duration: 9.5s; animation-delay: 3s;">💓</div>
+            <div class="floating-emoji" style="left: 55%; animation-duration: 8.5s; animation-delay: 1.5s;">💘</div>
+            <div class="floating-emoji" style="left: 68%; animation-duration: 11s; animation-delay: 4s;">💝</div>
+            <div class="floating-emoji" style="left: 78%; animation-duration: 7s; animation-delay: 2.5s;">💞</div>
+            <div class="floating-emoji" style="left: 90%; animation-duration: 9s; animation-delay: 0.5s;">💌</div>
+        </div>
+
+        <!-- Burst container for button press effects -->
+        <div id="burst-container" class="absolute inset-0 overflow-hidden pointer-events-none z-40"></div>
+    </div>
+
+    <header class="text-center my-3 z-10 flex flex-col items-center">
+        <!-- Relationship Counter Badge -->
+        <div id="counter-badge" class="mb-3 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md shadow-sm border border-rose-200/60 text-xs sm:text-sm font-semibold text-rose-700 flex items-center gap-2 transition-all duration-300">
+            <span>✨ </span>
+            <span id="counter-time" class="font-bold text-rose-800">0日 0時間 0分 0秒</span>
+            <span>✨</span>
+        </div>
+
+        <h1 id="main-title" class="text-2xl sm:text-3xl font-extrabold tracking-tight text-rose-800 drop-shadow-sm transition-colors duration-300">りおちゃんの好きなところ</h1>
+        <p id="main-subtitle" class="text-sm text-rose-600/80 mt-1 font-medium transition-colors duration-300">円をタップしてね。２個目の円もタップできるよ。</p>
     </header>
 
-    <main class="flex-grow flex items-center justify-center relative my-6 sm:my-10">
-        <!-- Container allowing space for radiating sub-buttons in 360 degrees -->
-        <div id="explorer-container" class="w-full max-w-lg h-[480px] sm:h-[540px] relative flex items-center justify-center">
+    <main class="flex-grow flex items-center justify-center relative my-6 sm:my-10 z-10">
+        <!-- Dynamic background glowing aura behind the buttons -->
+        <div id="button-aura" class="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-rose-500/10 blur-3xl pointer-events-none dynamic-aura z-20"></div>
+
+        <div id="explorer-container" class="w-full max-w-lg h-[480px] sm:h-[540px] relative flex items-center justify-center z-30">
             
-            <!-- 1. Rice Button (Top of triangle) -->
+            <!-- 1. Rice Button (Top of triangle) - Red / Appearance -->
             <div id="wrapper-rice" class="absolute top-12 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center">
-                <button onclick="toggleCategory('rice')" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-red-500 hover:bg-red-600 active:scale-95 text-white font-bold text-lg shadow-xl flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-red-300 z-40">
+                <button onclick="toggleCategory('rice')" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 active:scale-95 text-white font-bold text-lg shadow-xl shadow-rose-500/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-rose-300 z-40 border-2 border-white/80">
                     外見
                 </button>
-                <!-- Radial Sub-buttons container -->
                 <div id="sub-container-rice" class="absolute inset-0 pointer-events-none hidden"></div>
             </div>
 
-            <!-- 2. Noodles Button (Bottom-left of triangle) -->
+            <!-- 2. Noodles Button (Bottom-left of triangle) - Blue / Inner Personality -->
             <div id="wrapper-noodles" class="absolute bottom-12 left-8 sm:left-16 z-30 flex items-center justify-center">
-                <button onclick="toggleCategory('noodles')" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold text-lg shadow-xl flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-blue-300 z-40">
+                <button onclick="toggleCategory('noodles')" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-sky-400 to-blue-500 hover:from-sky-500 hover:to-blue-600 active:scale-95 text-white font-bold text-lg shadow-xl shadow-blue-500/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-blue-300 z-40 border-2 border-white/80">
                     中身
                 </button>
-                <!-- Radial Sub-buttons container -->
                 <div id="sub-container-noodles" class="absolute inset-0 pointer-events-none hidden"></div>
             </div>
 
-            <!-- 3. Bread Button (Bottom-right of triangle) -->
+            <!-- 3. Bread Button (Bottom-right of triangle) - Amber / Actions -->
             <div id="wrapper-bread" class="absolute bottom-12 right-8 sm:right-16 z-30 flex items-center justify-center">
-                <button onclick="toggleCategory('bread')" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-amber-400 hover:bg-amber-500 active:scale-95 text-slate-900 font-bold text-lg shadow-xl flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-amber-200 z-40">
+                <button onclick="toggleCategory('bread')" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 active:scale-95 text-slate-900 font-bold text-lg shadow-xl shadow-orange-400/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-amber-200 z-40 border-2 border-white/80">
                     行動
                 </button>
-                <!-- Radial Sub-buttons container -->
                 <div id="sub-container-bread" class="absolute inset-0 pointer-events-none hidden"></div>
             </div>
 
@@ -64,73 +128,209 @@
     </main>
 
     <div id="modal-container" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div id="modal-content" class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative fade-in border border-slate-100">
-            <!-- Speech bubble pointer triangle decoration -->
-            <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-white rotate-45 border-t border-l border-slate-100"></div>
+        <div id="modal-content" class="bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl max-w-sm w-full p-6 relative fade-in border border-rose-100">
+            <div id="modal-pointer" class="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-white rotate-45 border-t border-l border-rose-100 transition-colors duration-300"></div>
             
             <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full flex items-center justify-center bg-slate-100 transition-colors">
                 ×
             </button>
-            <h3 id="modal-title" class="text-xl font-bold text-slate-800 mb-2"></h3>
+            <h3 id="modal-title" class="text-xl font-bold text-rose-800 mb-2 transition-colors duration-300"></h3>
             <p id="modal-desc" class="text-slate-600 text-sm sm:text-base leading-relaxed"></p>
             <div class="mt-6 flex justify-end">
-                <button onclick="closeModal()" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-sm font-medium rounded-xl transition-colors">
+                <button id="modal-close-btn" onclick="closeModal()" class="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-sm font-medium rounded-xl transition-colors shadow-md shadow-rose-600/20">
                     閉じる
                 </button>
             </div>
         </div>
     </div>
 
-    <footer class="text-center text-xs text-slate-400 py-2">
-        Food Category Explorer &copy; 2026
+    <footer id="footer-text" class="text-center text-xs text-rose-500/70 py-2 z-10 font-medium transition-colors duration-300">
+        Rio Lover Explorer &copy; 2026
     </footer>
 
     <script>
-        // Data containing sub-items and descriptions for each category (now 6 items each)
         const categoryData = {
             rice: [
-                { name: "目", desc: "一目ぼれした好きなところ。本当にきれいな目してる👀" },
-                { name: "鼻", desc: "上からも下からも横からもどこから見ても整った鼻。小さくて羨ましい🌸" },
-                { name: "口", desc: "普段は小さくてきれいな口。笑うときはとってもかわいい口👄" },
-                { name: "服装", desc: "ほんとにおしゃれ。隣にいてプレッシャーがすごい😿" },
-                { name: "背", desc: "ちょうどいい高さではぐしやす🐶" },
-                { name: "スタイル", desc: "さすがにスタイルよすぎてどきどきする💛" }
+                { name: "目", desc: "一目ぼれした好きなところ。本当にきれいな目してる" },
+                { name: "鼻", desc: "上からも下からも横からもどこから見ても整った鼻。小さくて羨ましい" },
+                { name: "口", desc: "普段は小さくてきれいな口。笑うときはとってもかわいい口" },
+                { name: "服装", desc: "ほんとにおしゃれ。隣にいてプレッシャーがすごい" },
+                { name: "背", desc: "ちょうどいい高さではぐしやすい" },
+                { name: "スタイル", desc: "さすがにスタイルよすぎてどきどきする" }
             ],
             noodles: [
-                { name: "いい子", desc: "一番好きなところ。本当にいい子！！って感じで一目ぼれの次に好きになった理由の一つ🐈" },
-                { name: "優しい子", desc: "車運転するときとかいつも気遣ってくれて本当にうれしい🚙" },
-                { name: "真面目な子", desc: "学年上位に入るくらいちゃんと授業に行って頑張りやさんだね。すごいしえらいね本" },
-                { name: "元気な子", desc: "いつも元気いっぱいで明るい。いっぱい全力で笑ってくれてかわいい☺" },
-                { name: "大人っぽい子", desc: "たまに本当に年下なのかなっていうくらいしっかりしてて悔しいよ🐒" },
-                { name: "サバサバな子", desc: "りおちゃんといえばこれ。結構びしっと言ってくれて一緒にいて安心するよ🐡" }
+                { name: "いい子", desc: "一番好きなところ。本当にいい子！！って感じで一目ぼれの次に好きになった理由の一つ" },
+                { name: "優しい子", desc: "車運転するときとかいつも気遣ってくれて本当にうれしい" },
+                { name: "真面目な子", desc: "学年上位に入るくらいちゃんと授業に行って頑張りやさんだね。すごいしえらいね" },
+                { name: "元気な子", desc: "いつも元気いっぱいで明るい。いっぱい全力で笑ってくれてかわいい" },
+                { name: "大人っぽい子", desc: "たまに本当に年下なのかなっていうくらいしっかりしてて悔しいよ" },
+                { name: "サバサバな子", desc: "りおちゃんといえばこれ。結構びしっと言ってくれて一緒にいて安心するよ" }
             ],
             bread: [
-                { name: "頑張り屋さん", desc: "学校もバイトも頑張ってる姿本当に好き。尊敬してるよ🍣" },
-                { name: "几帳面", desc: "かばんの中とか小分けしてて自分のずぼらさを改めて感じる👜" },
-                { name: "負けず嫌い", desc: "ボウリングのときうまくできなくてすねちゃってかわいすぎた📍" },
-                { name: "甘えん坊", desc: "実は甘えん坊。会いたいとかはぐしたいとかうれしかったよ🍰" },
-                { name: "食欲旺盛", desc: "おなかすいたーとかかわいすぎる。いっぱい食べる子でさらに好きになったところの一つ🍚" },
-                { name: "器用", desc: "ブレスレットありがと。めちゃ上手すぎてびっくりした😲" }
+                { name: "頑張り屋さん", desc: "学校もバイトも頑張ってる姿本当に好き。尊敬してるよ" },
+                { name: "几帳面", desc: "かばんの中とか小分けしてて自分のずぼらさを改めて感じる" },
+                { name: "負けず嫌い", desc: "ボウリングのときうまくできなくてすねちゃってかわいすぎた" },
+                { name: "甘えん坊", desc: "実は甘えん坊。会いたいとかはぐしたいとかうれしかったよ" },
+                { name: "食欲旺盛", desc: "おなかすいたーとかかわいすぎる。いっぱい食べる子でさらに好きになったところの一つ" },
+                { name: "器用", desc: "ブレスレットありがと。めちゃ上手すぎてびっくりした" }
             ]
+        };
+
+        const emojiSets = {
+            rice: ["💖", "💌", "💗", "💓", "💘", "💝", "💞", "💌"],
+            noodles: ["🐰", "🐱", "🐶", "🐹", "🐼", "🐨", "🦊", "🐰"],
+            bread: ["🍰", "🍫", "🍩", "🍪", "🍬", "🧁", "🍭", "🍮"],
+            default: ["💖", "💌", "💗", "💓", "💘", "💝", "💞", "💌"]
         };
 
         let activeCategory = null;
 
-        // Toggle category and trigger 360-degree circular rendering
+        const themes = {
+            rice: {
+                bodyBg: 'linear-gradient(135deg, #fff1f2 0%, #ffe4e6 50%, #fef2f2 100%)',
+                shapeBg: 'rgba(244, 63, 94, 0.1)',
+                auraBg: 'bg-rose-500/20',
+                titleColor: 'text-rose-800',
+                subColor: 'text-rose-600/80',
+                subBorder: 'border-rose-200',
+                subHover: 'hover:bg-rose-50',
+                modalTitle: 'text-rose-800',
+                modalBorder: 'border-rose-100',
+                btnBg: 'bg-rose-600 hover:bg-rose-700 shadow-rose-600/20',
+                footerColor: 'text-rose-500/70'
+            },
+            noodles: {
+                bodyBg: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f8fafc 100%)',
+                shapeBg: 'rgba(14, 165, 233, 0.1)',
+                auraBg: 'bg-sky-500/20',
+                titleColor: 'text-sky-900',
+                subColor: 'text-sky-600/80',
+                subBorder: 'border-sky-200',
+                subHover: 'hover:bg-sky-50',
+                modalTitle: 'text-sky-900',
+                modalBorder: 'border-sky-100',
+                btnBg: 'bg-sky-600 hover:bg-sky-700 shadow-sky-600/20',
+                footerColor: 'text-sky-500/70'
+            },
+            bread: {
+                bodyBg: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fff7ed 100%)',
+                shapeBg: 'rgba(245, 158, 11, 0.1)',
+                auraBg: 'bg-amber-500/20',
+                titleColor: 'text-amber-900',
+                subColor: 'text-amber-700/80',
+                subBorder: 'border-amber-200',
+                subHover: 'hover:bg-amber-50',
+                modalTitle: 'text-amber-900',
+                modalBorder: 'border-amber-100',
+                btnBg: 'bg-amber-600 hover:bg-amber-700 shadow-amber-600/20',
+                footerColor: 'text-amber-600/70'
+            },
+            default: {
+                bodyBg: 'linear-gradient(135deg, #fff1f2 0%, #fdf2f8 50%, #fef3c7 100%)',
+                shapeBg: 'rgba(244, 63, 94, 0.08)',
+                auraBg: 'bg-rose-500/10',
+                titleColor: 'text-rose-800',
+                subColor: 'text-rose-600/80',
+                subBorder: 'border-rose-200',
+                subHover: 'hover:bg-rose-50',
+                modalTitle: 'text-rose-800',
+                modalBorder: 'border-rose-100',
+                btnBg: 'bg-rose-600 hover:bg-rose-700 shadow-rose-600/20',
+                footerColor: 'text-rose-500/70'
+            }
+        };
+
+        function updateFloatingEmojis(categoryKey) {
+            const container = document.getElementById('emoji-container');
+            const emojis = emojiSets[categoryKey] || emojiSets.default;
+            container.innerHTML = '';
+
+            const leftPositions = [6, 18, 28, 42, 55, 68, 78, 90];
+            const durations = [8, 10, 7.5, 9.5, 8.5, 11, 7, 9];
+            const delays = [0, 2, 1, 3, 1.5, 4, 2.5, 0.5];
+
+            emojis.forEach((emoji, i) => {
+                const div = document.createElement('div');
+                div.className = 'floating-emoji';
+                div.style.left = `${leftPositions[i]}%`;
+                div.style.animationDuration = `${durations[i]}s`;
+                div.style.animationDelay = `${delays[i]}s`;
+                div.textContent = emoji;
+                container.appendChild(div);
+            });
+        }
+
+        function triggerBurstEffect(wrapperId, categoryKey) {
+            const wrapper = document.getElementById(wrapperId);
+            const burstContainer = document.getElementById('burst-container');
+            const rect = wrapper.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            const emojis = emojiSets[categoryKey] || emojiSets.default;
+            const count = 6;
+
+            for (let i = 0; i < count; i++) {
+                const span = document.createElement('span');
+                span.className = 'absolute text-2xl pointer-events-none';
+                span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                span.style.left = `${centerX}px`;
+                span.style.top = `${centerY}px`;
+                span.style.transition = 'all 0.8s cubic-bezier(0.1, 0.8, 0.3, 1)';
+                span.style.transform = 'translate(-50%, -50%) scale(0.5)';
+                span.style.opacity = '1';
+
+                burstContainer.appendChild(span);
+
+                const angle = (i / count) * 2 * Math.PI + (Math.random() * 0.5);
+                const distance = 70 + Math.random() * 40;
+                const targetX = Math.cos(angle) * distance;
+                const targetY = Math.sin(angle) * distance;
+
+                setTimeout(() => {
+                    span.style.transform = `translate(calc(-50% + ${targetX}px), calc(-50% + ${targetY}px)) scale(1.3) rotate(${Math.random() * 60 - 30}deg)`;
+                    span.style.opacity = '0';
+                }, 20);
+
+                setTimeout(() => {
+                    span.remove();
+                }, 850);
+            }
+        }
+
+        function applyTheme(key) {
+            const theme = themes[key] || themes.default;
+            document.getElementById('body-bg').style.background = theme.bodyBg;
+            document.querySelectorAll('.floating-shape').forEach(el => {
+                el.style.backgroundColor = theme.shapeBg;
+            });
+            const aura = document.getElementById('button-aura');
+            aura.className = `absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full blur-3xl pointer-events-none dynamic-aura z-20 ${theme.auraBg}`;
+            document.getElementById('main-title').className = `text-2xl sm:text-3xl font-extrabold tracking-tight drop-shadow-sm transition-colors duration-300 ${theme.titleColor}`;
+            document.getElementById('main-subtitle').className = `text-sm mt-1 font-medium transition-colors duration-300 ${theme.subColor}`;
+            document.getElementById('footer-text').className = `text-center text-xs py-2 z-10 font-medium transition-colors duration-300 ${theme.footerColor}`;
+            
+            updateFloatingEmojis(key);
+        }
+
         function toggleCategory(categoryKey) {
             const keys = ['rice', 'noodles', 'bread'];
+            const wrapperMap = { rice: 'wrapper-rice', noodles: 'wrapper-noodles', bread: 'wrapper-bread' };
             
             keys.forEach(key => {
                 const subContainer = document.getElementById(`sub-container-${key}`);
                 if (key === categoryKey) {
                     if (subContainer.classList.contains('hidden')) {
                         subContainer.classList.remove('hidden');
-                        activeCategory = key; // Set activeCategory first
-                        renderRadialButtons(subContainer, categoryData[key].length);
+                        activeCategory = key;
+                        applyTheme(key);
+                        triggerBurstEffect(wrapperMap[key], key);
+                        renderRadialButtons(subContainer, categoryData[key].length, key);
                     } else {
                         subContainer.classList.add('hidden');
                         subContainer.innerHTML = '';
                         activeCategory = null;
+                        applyTheme('default');
                     }
                 } else {
                     subContainer.classList.add('hidden');
@@ -139,57 +339,82 @@
             });
         }
 
-        // Compute 360-degree circular positions around the parent button using Math.sin / Math.cos
-        function renderRadialButtons(containerElement, totalItems) {
+        function renderRadialButtons(containerElement, totalItems, categoryKey) {
             containerElement.innerHTML = '';
             if (!activeCategory || !categoryData[activeCategory]) return;
             const items = categoryData[activeCategory];
-            const radius = 100; // Radius distance from the parent button center in pixels
-            const btnSize = 64; // Sub-button width/height offset correction (half of 64px = 32px)
+            const radius = 105;
+            const btnSize = 64;
+            const theme = themes[categoryKey];
 
             items.forEach((item, index) => {
-                // Calculate angle in radians to distribute evenly across 360 degrees (2 * PI)
                 const angle = (index / totalItems) * 2 * Math.PI;
                 const x = Math.cos(angle) * radius;
                 const y = Math.sin(angle) * radius;
 
                 const btn = document.createElement('button');
-                // Smaller circular sub-button styled cleanly without emojis
-                btn.className = "absolute w-16 h-16 rounded-full bg-white hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-bold shadow-lg border-2 border-slate-200 flex items-center justify-center transition-all duration-200 active:scale-95 pointer-events-auto fade-in z-50 text-center p-1 leading-tight";
+                btn.className = `absolute w-16 h-16 rounded-full bg-white ${theme.subHover} text-slate-700 text-xs sm:text-sm font-bold shadow-lg border-2 ${theme.subBorder} flex items-center justify-center transition-all duration-200 active:scale-95 pointer-events-auto fade-in z-50 text-center p-1 leading-tight`;
                 
-                // Position relative to the center of the parent button container
                 btn.style.left = `calc(50% + ${x}px - ${btnSize / 2}px)`;
                 btn.style.top = `calc(50% + ${y}px - ${btnSize / 2}px)`;
                 btn.textContent = item.name;
 
                 btn.onclick = (e) => {
                     e.stopPropagation();
-                    showDescription(item.name, item.desc);
+                    showDescription(item.name, item.desc, categoryKey);
                 };
 
                 containerElement.appendChild(btn);
             });
         }
 
-        // Display description popup bubble
-        function showDescription(title, description) {
-            document.getElementById('modal-title').textContent = title;
+        function showDescription(title, description, categoryKey) {
+            const theme = themes[categoryKey] || themes.default;
+
+            const modalTitle = document.getElementById('modal-title');
+            modalTitle.textContent = title;
+            modalTitle.className = `text-xl font-bold mb-2 transition-colors duration-300 ${theme.modalTitle}`;
+
             document.getElementById('modal-desc').textContent = description;
+
+            const modalContent = document.getElementById('modal-content');
+            modalContent.className = `bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl max-w-sm w-full p-6 relative fade-in border ${theme.modalBorder}`;
+
+            const closeBtn = document.getElementById('modal-close-btn');
+            closeBtn.className = `px-5 py-2.5 text-white text-sm font-medium rounded-xl transition-colors shadow-md ${theme.btnBg}`;
+
             const modal = document.getElementById('modal-container');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
 
-        // Close description popup bubble
         function closeModal() {
             const modal = document.getElementById('modal-container');
             modal.classList.remove('flex');
             modal.classList.add('hidden');
+
+            if (activeCategory) {
+                const keys = ['rice', 'noodles', 'bread'];
+                keys.forEach(key => {
+                    const subContainer = document.getElementById(`sub-container-${key}`);
+                    if (key === activeCategory) {
+                        subContainer.classList.remove('hidden');
+                        renderRadialButtons(subContainer, categoryData[key].length, key);
+                    } else {
+                        subContainer.classList.add('hidden');
+                        subContainer.innerHTML = '';
+                    }
+                });
+                applyTheme(activeCategory);
+            }
         }
 
-        // Close active expanded sub-buttons when tapping outside on background
         window.onclick = function(event) {
             const container = document.getElementById('explorer-container');
+            const modal = document.getElementById('modal-container');
+            
+            if (!modal.classList.contains('hidden')) return;
+
             if (!container.contains(event.target)) {
                 ['rice', 'noodles', 'bread'].forEach(key => {
                     const subContainer = document.getElementById(`sub-container-${key}`);
@@ -197,8 +422,34 @@
                     subContainer.innerHTML = '';
                 });
                 activeCategory = null;
+                applyTheme('default');
             }
         };
+
+        const anniversaryDate = new Date(2026, 7, 3, 2, 0, 0); // August 3, 2026 02:00:00 (Month is 0-indexed: 7 = August)
+
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - anniversaryDate;
+
+            if (diff < 0) {
+                // If current time is before August 3, 2026
+                document.getElementById('counter-time').textContent = "まもなくスタート！";
+                return;
+            }
+
+            const seconds = Math.floor(diff / 1000);
+            const days = Math.floor(seconds / (3600 * 24));
+            const hours = Math.floor((seconds % (3600 * 24)) / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+
+            document.getElementById('counter-time').textContent = `${days}日 ${hours}時間 ${minutes}分 ${secs}秒`;
+        }
+
+        // Run immediately and update every second
+        updateCounter();
+        setInterval(updateCounter, 1000);
     </script>
 </body>
 </html>
