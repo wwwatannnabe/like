@@ -94,31 +94,31 @@
         <p id="main-subtitle" class="text-sm text-rose-600/80 mt-1 font-medium transition-colors duration-300">円をタップしてね。２個目の円もタップできるよ。</p>
     </header>
 
-    <main class="flex-grow flex items-center justify-center relative my-6 sm:my-10 z-10">
+    <main class="flex-grow flex items-center justify-center relative my-4 sm:my-10 z-10">
         <!-- Dynamic background glowing aura behind the buttons -->
-        <div id="button-aura" class="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-rose-500/10 blur-3xl pointer-events-none dynamic-aura z-20"></div>
+        <div id="button-aura" class="absolute w-64 h-64 sm:w-96 sm:h-96 rounded-full bg-rose-500/10 blur-3xl pointer-events-none dynamic-aura z-20"></div>
 
-        <div id="explorer-container" class="w-full max-w-lg h-[480px] sm:h-[540px] relative flex items-center justify-center z-30">
+        <div id="explorer-container" class="w-full max-w-lg h-[420px] sm:h-[540px] relative flex items-center justify-center z-30">
             
             <!-- 1. Rice Button (Top of triangle) - Red / Appearance -->
-            <div id="wrapper-rice" class="absolute top-12 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center">
-                <button onclick="toggleCategory('rice')" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 active:scale-95 text-white font-bold text-lg shadow-xl shadow-rose-500/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-rose-300 z-40 border-2 border-white/80">
+            <div id="wrapper-rice" class="absolute top-8 sm:top-12 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center">
+                <button onclick="toggleCategory('rice')" class="w-18 h-18 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 active:scale-95 text-white font-bold text-base sm:text-lg shadow-xl shadow-rose-500/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-rose-300 z-40 border-2 border-white/80">
                     外見
                 </button>
                 <div id="sub-container-rice" class="absolute inset-0 pointer-events-none hidden"></div>
             </div>
 
-            <!-- 2. Noodles Button (Bottom-left of triangle) - Blue / Inner Personality -->
-            <div id="wrapper-noodles" class="absolute bottom-12 left-8 sm:left-16 z-30 flex items-center justify-center">
-                <button onclick="toggleCategory('noodles')" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-sky-400 to-blue-500 hover:from-sky-500 hover:to-blue-600 active:scale-95 text-white font-bold text-lg shadow-xl shadow-blue-500/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-blue-300 z-40 border-2 border-white/80">
+            <!-- 2. Noodles Button (Bottom-left of triangle) - Center-oriented on mobile -->
+            <div id="wrapper-noodles" class="absolute bottom-8 left-12 sm:left-16 z-30 flex items-center justify-center">
+                <button onclick="toggleCategory('noodles')" class="w-18 h-18 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-sky-400 to-blue-500 hover:from-sky-500 hover:to-blue-600 active:scale-95 text-white font-bold text-base sm:text-lg shadow-xl shadow-blue-500/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-blue-300 z-40 border-2 border-white/80">
                     中身
                 </button>
                 <div id="sub-container-noodles" class="absolute inset-0 pointer-events-none hidden"></div>
             </div>
 
-            <!-- 3. Bread Button (Bottom-right of triangle) - Amber / Actions -->
-            <div id="wrapper-bread" class="absolute bottom-12 right-8 sm:right-16 z-30 flex items-center justify-center">
-                <button onclick="toggleCategory('bread')" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 active:scale-95 text-slate-900 font-bold text-lg shadow-xl shadow-orange-400/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-amber-200 z-40 border-2 border-white/80">
+            <!-- 3. Bread Button (Bottom-right of triangle) - Center-oriented on mobile -->
+            <div id="wrapper-bread" class="absolute bottom-8 right-12 sm:right-16 z-30 flex items-center justify-center">
+                <button onclick="toggleCategory('bread')" class="w-18 h-18 sm:w-24 sm:h-24 rounded-full bg-gradient-to-tr from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 active:scale-95 text-slate-900 font-bold text-base sm:text-lg shadow-xl shadow-orange-400/30 flex items-center justify-center transition-transform duration-150 focus:outline-none focus:ring-4 focus:ring-amber-200 z-40 border-2 border-white/80">
                     行動
                 </button>
                 <div id="sub-container-bread" class="absolute inset-0 pointer-events-none hidden"></div>
@@ -344,9 +344,9 @@
             if (!activeCategory || !categoryData[activeCategory]) return;
             const items = categoryData[activeCategory];
             
-            // スマホ画面（幅640px未満）のときは半径を少し小さく（82px）して、見切れないようにする
-            const radius = window.innerWidth < 640 ? 82 : 105;
-            const btnSize = window.innerWidth < 640 ? 56 : 64;
+            // スマホ（幅640px未満）では半径を68pxまで小さくし、画面からはみ出ないように配置
+            const radius = window.innerWidth < 640 ? 68 : 105;
+            const btnSize = window.innerWidth < 640 ? 48 : 64;
             const theme = themes[categoryKey];
 
             items.forEach((item, index) => {
@@ -355,8 +355,7 @@
                 const y = Math.sin(angle) * radius;
 
                 const btn = document.createElement('button');
-                // スマホ時のみボタンサイズをほんの少しコンパクトに調整
-                btn.className = `absolute w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white ${theme.subHover} text-slate-700 text-[11px] sm:text-sm font-bold shadow-lg border-2 ${theme.subBorder} flex items-center justify-center transition-all duration-200 active:scale-95 pointer-events-auto fade-in z-50 text-center p-1 leading-tight`;
+                btn.className = `absolute w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white ${theme.subHover} text-slate-700 text-[10px] sm:text-sm font-bold shadow-md border-2 ${theme.subBorder} flex items-center justify-center transition-all duration-200 active:scale-95 pointer-events-auto fade-in z-50 text-center p-0.5 leading-tight`;
                 
                 btn.style.left = `calc(50% + ${x}px - ${btnSize / 2}px)`;
                 btn.style.top = `calc(50% + ${y}px - ${btnSize / 2}px)`;
