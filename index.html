@@ -3,130 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>わたしのWebサイト</title>
-    <!-- Google Fontsからフォントを読み込み -->
-    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <title>分類テスト</title>
     <style>
-        /* 全体のデザインと動き */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        body {
+            font-family: sans-serif;
+            margin: 40px;
+            text-align: center;
         }
 
-        body {
-            font-family: 'M PLUS Rounded 1c', sans-serif;
-            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #333;
-            min-height: 100vh;
+        /* メインの3つのボタン（赤、青、黄の大きな円） */
+        .main-buttons {
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
+            gap: 40px;
+            margin-bottom: 40px;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* メインのカード */
-        .container {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 40px 30px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
-
-        /* アイコン（絵文字） */
-        .avatar {
-            font-size: 80px;
-            margin-bottom: 15px;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* タイトル・自己紹介 */
-        h1 {
-            font-size: 24px;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-
-        p {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        /* リンクボタンたち */
-        .links {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .btn {
-            display: block;
-            background: #fff;
-            color: #4a5568;
-            padding: 12px 20px;
-            border-radius: 50px;
-            text-decoration: none;
+        .circle-btn {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            background: #ff758c;
+        /* 赤（米） */
+        .btn-rice { background-color: #ff4d4d; }
+        /* 青（パン） */
+        .btn-bread { background-color: #4da6ff; }
+        /* 黄（麺） */
+        .btn-noodle { background-color: #ffcc00; color: #333; }
+
+        /* サブ項目の表示エリア */
+        .sub-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            min-height: 80px;
+        }
+
+        .sub-group {
+            display: none; /* 初期状態は非表示 */
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sub-group.active {
+            display: flex; /* 選択されたら表示 */
+        }
+
+        .sub-circle-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #fff;
         }
 
-        /* フッター */
-        footer {
-            margin-top: 30px;
-            font-size: 12px;
-            color: #888;
+        /* サブの色の微調整（似た系統の色） */
+        .sub-red { background-color: #ff8080; }
+        .sub-blue { background-color: #80c2ff; }
+        .sub-yellow { background-color: #ffe066; color: #333; }
+
+        /* 説明欄エリア */
+        #description-box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: left;
+            min-height: 50px;
+            background-color: #f9f9f9;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- アイコンは好きな絵文字に変えてね -->
-        <div class="avatar">🐱</div>
-        
-        <h1>こんにちは、〇〇です！</h1>
-        <p>GitHub Pagesで作ったてきとうなウェブサイトです。<br>趣味や好きなものを発信していきます✨</p>
+    <h1>分類メニュー</h1>
 
-        <div class="links">
-            <!-- リンク先を自分のSNSやブログに変えてね -->
-            <a href="https://twitter.com" class="btn" target="_blank">💬 X (Twitter)</a>
-            <a href="https://github.com" class="btn" target="_blank">🐙 GitHub</a>
-            <a href="https://note.com" class="btn" target="_blank">📝 Note / ブログ</a>
-            <a href="https://example.com" class="btn" target="_blank">🔗 その他のリンク</a>
+    <!-- メインボタン（米、パン、麺） -->
+    <div class="main-buttons">
+        <button class="circle-btn btn-rice" onclick="showSub('rice')">米</button>
+        <button class="circle-btn btn-bread" onclick="showSub('bread')">パン</button>
+        <button class="circle-btn btn-noodle" onclick="showSub('noodle')">麺</button>
+    </div>
+
+    <!-- サブ項目エリア -->
+    <div class="sub-container">
+        <!-- 米のサブ項目 -->
+        <div id="sub-rice" class="sub-group">
+            <button class="sub-circle-btn sub-red" onclick="showDesc('どんぶり', 'どんぶりは、ご飯の上に具材をのせた料理です。')">どんぶり</button>
+            <button class="sub-circle-btn sub-red" onclick="showDesc('カレー', 'カレーは、スパイスで味付けしたソースをご飯にかけて食べます。')">カレー</button>
+            <button class="sub-circle-btn sub-red" onclick="showDesc('すし', 'すしは、酢飯に魚介類などを合わせた料理です。')">すし</button>
         </div>
 
-        <footer>
-            &copy; 2026 My Web Site
-        </footer>
+        <!-- パンのサブ項目 -->
+        <div id="sub-bread" class="sub-group">
+            <button class="sub-circle-btn sub-blue" onclick="showDesc('サンドイッチ', 'サンドイッチは、パンで具材を挟んだ料理です。')">サンド</button>
+            <button class="sub-circle-btn sub-blue" onclick="showDesc('トースト', 'トーストは、パンを焼いたものです。')">トースト</button>
+            <button class="sub-circle-btn sub-blue" onclick="showDesc('ハンバーガー', 'ハンバーガーは、パンで肉などを挟んだファストフードです。')">バーガー</button>
+        </div>
+
+        <!-- 麺のサブ項目 -->
+        <div id="sub-noodle" class="sub-group">
+            <button class="sub-circle-btn sub-yellow" onclick="showDesc('ラーメン', 'ラーメンは、スープに入った中華麺です。')">ラーメン</button>
+            <button class="sub-circle-btn sub-yellow" onclick="showDesc('うどん', 'うどんは、小麦粉から作られる太い麺です。')">うどん</button>
+            <button class="sub-circle-btn sub-yellow" onclick="showDesc('パスタ', 'パスタは、イタリア発祥の麺料理です。')">パスタ</button>
+        </div>
     </div>
+
+    <!-- 説明欄 -->
+    <div id="description-box">
+        <h3>説明</h3>
+        <p id="desc-text">上のボタンを押してください。</p>
+    </div>
+
+    <script>
+        // メインボタンを押した時の処理（サブ項目の切り替え）
+        function showSub(category) {
+            // 一度すべてのサブグループを非表示にする
+            document.querySelectorAll('.sub-group').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // 選択されたカテゴリのサブグループを表示する
+            document.getElementById('sub-' + category).classList.add('active');
+
+            // 説明欄をリセット
+            document.getElementById('desc-text').innerText = '項目を選んでください。';
+        }
+
+        // サブ項目を押した時の処理（説明文の表示）
+        function showDesc(title, text) {
+            document.getElementById('desc-text').innerHTML = '<strong>' + title + '</strong><br>' + text;
+        }
+    </script>
 
 </body>
 </html>
